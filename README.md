@@ -421,4 +421,506 @@ user-education document
 #### Which are queries are slower because our documents are in mulitple Small files so it take some miliseconds time to do computation because we run muliple query over the multiple documents.
 #### Nowadays New Version of MongoDB have also feature to do transcation on multiple documents also but it was complicated.
 
+# Practicle Part of MongoDB 
 
+### To Use MongoDB Database we need two things to install first
+- **MongoDB Installer to install mongoDB Database in our Machine.**
+- **MongoDB Shell installer The MongoDB Shell (mongosh) is an interactive JavaScript shell used to interact with MongoDB instances. It provides a way to connect to your MongoDB database server, query and manipulate data, and perform administrative operations.** 
+
+## Commands to use MongoDB Database 
+
+### Invoke MongoDB Shell 
+We have to invoke mongodb shell because it work as admistrator and we can interact with MongoDB instances and with the help of this **`mongosh`** it help to connect to your MongoDB database server , query and manipulate data and perform administrative operations.  
+**`We use CMD "Command Prompt to Create MongoDB shell`**
+```cmd
+cmd: mongosh
+``` 
+
+### How to show all database in our mongodb 
+The command to show all the database of our mongoDB was **`show databases ;`** or **`show dbs`**
+```cmd
+<test>: show databases;
+<text>: show dbs;
+```
+### `We have to know that only those database was show who has data in it.` 
+
+### How to switch to use other Database which was present in MongoDB
+The command to switch to use other database was present in MongoDB was  
+```cmd
+<text>: use <database-name>;
+```
+### `We "use" command to switch to other databases in MongoDB`
+
+### How we create new Database in mongoDB 
+We again use **`use command`** to create new database in mongoDB  
+```cmd
+<text>: use <New-Database-Name>
+``` 
+### `To create New Database we use "use command" ` 
+
+## Commands on Collection 
+
+### What all the things we can do with collections
+1. List all the collection.  **`READ`**
+2. Create a new collection.  **`CREATE`**
+3. Update the name of collection. **`UPDATE`**  
+4. Remove the collection.   **`DELETE`**  
+
+### 1. List all the Collections
+We want to see all the collections in our Database of MongoDB Server, So we use this command  
+```
+<test>: show collections
+```
+### 2. Create a new Collection
+For creating  new collection in current Database we use this command :-
+```
+<test>: db.createCollection("students");
+``` 
+### `The command was db.createCollection("students"); in which db was indicate to cureent directory database in our case which was test and after that command .createCollection("students") was help to create collection of students` 
+
+### 3. Update the name of Collection 
+To rename the name of collection we use this command :-   
+```
+<test> : db.currentName.renameCollection("New Name of Collection ");
+```
+### ` Let understand this command with example  in above example we create new collection which name was students so we write to change collection name like this "db.students.renameCollection("college_students") and here also db represent current database.`  
+
+## `Both the command of create collection , rename collection will give output which was {ok : 1} which means succesfull` 
+
+### 4. Remove the Collection 
+We see two commands to delete collection from our Database first we deprecated command and than new command 
+
+#### `Deprecated command `
+```
+<test> : db.nameOfCollection.removeCollection({ });
+```
+With the help of this we can delete or remove the collection of our Database one or more than one but now it was `deprecated`.
+
+#### `There was another command to remove or collection let see that also `
+```
+<test> : db.nameOfCollection.drop( );
+```
+We can remove the collection with this `drop command` also. 
+
+## Commands on Documents 
+
+### What was the things we do from documents 
+1. First was We can insert the Data. **`CREATE`**
+2. Second was we can querey that data. **`READ`**
+3. Third was we can update the data. **`UPDATE`**
+4. Fourth was we can delete the data. **`DELETE`**  
+
+### `We are create document data of "BSON" which look like JSON `
+
+#### Lets create Data to insert in our new collection 
+```json
+var user = {
+    "userName":"Aayush Vyas",
+    "userIP":"27.0.0.0",
+    "userLogInTime": "8:30PM"
+
+}
+``` 
+
+#### We have to insert this user data in new created collection  for that we have shortcut command to do that.
+```json
+ userInformationDatabase> db.students.insertOne(user); // The Command to insert the data in our  collections
+
+ // Output of above command to insert data and got insertedId
+{
+  acknowledged: true,
+  insertedId: ObjectId('66901f13daffd4e57cc4e49b')
+}
+```
+### `With the help of this command db.students.insertOne( ) we can insert the data.`
+
+#### What if we want to insert multiple documents in our Collection.
+```json
+userInformationDatabase> db.students.insertMany([{userName:"Sheetal Armani", userIP:"127.0.0.1"},{userName:"Armaan Khan", userIP:"127.0.1.0",hobby:"Singing"}]); // The Command To insert many documents
+
+// Output of inserted BSON Documents with it ObjectId
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('66902206daffd4e57cc4e49c'),
+    '1': ObjectId('66902206daffd4e57cc4e49d')
+  }
+}
+```
+### `In this command  db.students.insertMany([{ },{ } ,{ }])we enter the arrays of document to insert multiple BSON documnets`
+
+### `Now we want to run query on our data or we say fetch "READ" the data from database`
+To run query on our data we use this given command  :-
+```json
+test> db.students.find();  // The simplest query to run over our data to fetch information from Database
+
+// Output of Query was.....
+[
+  {
+    _id: ObjectId('669024a5daffd4e57cc4e49e'),
+    userName: 'Aayush Vyas',
+    userIP: '27.0.0.0',
+    userLogInTime: '8:30PM'
+  },
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e49f'),
+    userName: 'Sheetal Armani',
+    userIP: '127.0.0.1'
+  },
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e4a0'),
+    userName: 'Armaan Khan',
+    userIP: '127.0.1.0',
+    hobby: 'Singing'
+  }
+]
+```
+### We don't want whole data only want specific data from our Collections than we can add filter also to our query .....
+To add filter option in our query we can pass specific key-pair value in json format inside the find( ) command query 
+```json
+test > db.students.find({userName:"Aayush Vyas"}) //Here we pass the specific key-pair value to add filter in it.
+
+// The Output of the filter query was :-
+students> db.students.find({userName:"Aayush Vyas"});
+[
+  {
+    _id: ObjectId('669024a5daffd4e57cc4e49e'),
+    userName: 'Aayush Vyas',
+    userIP: '27.0.0.0',
+    userLogInTime: '8:30PM'
+  }
+]
+```
+
+### How we Query Nested Documents let see with example 
+**Creating Nested Documents**  
+```json 
+Creating userFullInformation document 
+
+{
+  userName: 'Aayush Vyas',
+  userAge: 25,
+  userAddress: {
+    userHouseNumber: '315 Shri Nagar Extension Near Kalindi Park ',
+    userCity: 'Indore',
+    userState: 'Madhya Pradesh',
+    userCountry: 'India'
+  }
+}
+```
+#### Let insert it in our collection students
+```json
+test > db.students.insertOne(); // Insert the BSON Document inside students collections 
+
+// It returns with Objectid 
+{
+    _id: ObjectId('66902bacdaffd4e57cc4e4a1'),
+    userName: 'Aayush Vyas',
+    userAge: 25,
+    userAddress: {
+      userHouseNumber: '315 Shri Nagar Extension Near Kalindi Park ',
+      userCity: 'Indore',
+      userState: 'Madhya Pradesh',
+      userCountry: 'India'
+    }
+  }
+``` 
+
+### Now we want to find query on the basis of userCity here also we want to add filter....
+```json
+test> db.students.find({"userAddress.userCity":"Indore"}); // Here we can again filter on the base of userCity
+
+// The Output of the query was 
+[
+  {
+    _id: ObjectId('66902bacdaffd4e57cc4e4a1'),
+    userName: 'Aayush Vyas',
+    userAge: 25,
+    userAddress: {
+      userHouseNumber: '315 Shri Nagar Extension Near Kalindi Park ',
+      userCity: 'Indore',
+      userState: 'Madhya Pradesh',
+      userCountry: 'India'
+    }
+  }
+]
+``` 
+
+## When we don't know the exact keyword we want to find in this scenario we use Regex or Regular Expression to do query search.
+
+**Asume that we have to find the  keyword which Start from S and we forget the keyword so here we use Regex to find that Keyword**  
+```json
+test> db.students.find({userName:/S.*/}); // Here we use regular expression aka Regex that the keyword Start from S query on First Character S and return the fetch Data 
+
+// The Fetch Data from our DB was 
+[
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e49f'),
+    userName: 'Sheetal Armani',
+    userIP: '127.0.0.1'
+  }
+]
+```
+
+### We can limit our Documents also if the Documents are more in the collections so our loading all data will not disturb efficency and performance also.
+For limiting our documents to fetch the data we use this command :- 
+```json 
+test> db.students.find().limit(2); // So we limit our documents that only 2 documents are fetch from our DB
+```
+
+### We want that our BSON document was seen in formatted perfectly...
+In previous version of MonogDB the our Documents are seen in one line not formatted properly so we use preety command for that but in new versions of MongoDB  they was defaulty formatted properly.
+```
+test> db.students.find().pretty();
+``` 
+### We want to Skip some documents in our collection 
+Now if we want to skip our documents in our collection than we have to use skip command to skip the documents according to sequence number assume that we want to skip 1 numbers of documents so it skip one documents from our all documents of BSON file of our collections.
+
+```json
+test> db.students.find().skip(1); // Here we skip our documents by 1 
+
+// The output was of skiping documents are :- 
+[
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e49f'),
+    userName: 'Sheetal Armani',
+    userIP: '127.0.0.1'
+  },
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e4a0'),
+    userName: 'Armaan Khan',
+    userIP: '127.0.1.0',
+    hobby: 'Singing'
+  },
+  {
+    _id: ObjectId('66902bacdaffd4e57cc4e4a1'),
+    userName: 'Aayush Vyas',
+    userAge: 25,
+    userAddress: {
+      userHouseNumber: '315 Shri Nagar Extension Near Kalindi Park ',
+      userCity: 'Indore',
+      userState: 'Madhya Pradesh',
+      userCountry: 'India'
+    }
+  }
+]
+```
+
+### We can sort our Documents in the Ascending and Descending Order on the particular fields
+We can sort our documents in the Ascending and descending order on the particular fields let see command with the help of example
+```json 
+test > db.students.find().sort({userName:1}); // Here we use sort command on the basis of userName in our document and give them value 1 in sort method which means it sorted in Ascending order 
+
+// Output was 
+[
+  {
+    _id: ObjectId('669024a5daffd4e57cc4e49e'),
+    userName: 'Aayush Vyas',
+    userIP: '27.0.0.0',
+    userLogInTime: '8:30PM'
+  },
+  {
+    _id: ObjectId('66902bacdaffd4e57cc4e4a1'),
+    userName: 'Aayush Vyas',
+    userAge: 25,
+    userAddress: {
+      userHouseNumber: '315 Shri Nagar Extension Near Kalindi Park ',
+      userCity: 'Indore',
+      userState: 'Madhya Pradesh',
+      userCountry: 'India'
+    }
+  },
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e4a0'),
+    userName: 'Armaan Khan',
+    userIP: '127.0.1.0',
+    hobby: 'Singing'
+  },
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e49f'),
+    userName: 'Sheetal Armani',
+    userIP: '127.0.0.1'
+  }
+]
+
+// Now in Descending order we have to give -1 in sort method 
+test > db.students.find().sort({userName:-1});
+
+// Output was 
+[
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e49f'),
+    userName: 'Sheetal Armani',
+    userIP: '127.0.0.1'
+  },
+  {
+    _id: ObjectId('669024d2daffd4e57cc4e4a0'),
+    userName: 'Armaan Khan',
+    userIP: '127.0.1.0',
+    hobby: 'Singing'
+  },
+  {
+    _id: ObjectId('669024a5daffd4e57cc4e49e'),
+    userName: 'Aayush Vyas',
+    userIP: '27.0.0.0',
+    userLogInTime: '8:30PM'
+  },
+  {
+    _id: ObjectId('66902bacdaffd4e57cc4e4a1'),
+    userName: 'Aayush Vyas',
+    userAge: 25,
+    userAddress: {
+      userHouseNumber: '315 Shri Nagar Extension Near Kalindi Park ',
+      userCity: 'Indore',
+      userState: 'Madhya Pradesh',
+      userCountry: 'India'
+    }
+  }
+]
+```
+
+### Now we want to count how much documents are in our collection than.... 
+To find the count of documents in our collections than we use count query to find total document in our collection 
+```json
+test> db.students.find().count(); // With the help of this query we can find total number of document
+
+// Output was 
+4
+``` 
+
+### Now if we have same data in our DB multiple Time but we have to find only one desired data from our Database than ... 
+Assume in our DB we have multiple same userName Data and we want the one particular data from our Database or we want only distinct data it means total number of different values regardless how many times it appears in the dataset than we use distinct command 
+
+```json
+test > db.students.distinct("userName"); // to find distinct data 
+//It give array of distinct userName as a output
+[ 'Aayush Vyas', 'Armaan Khan', 'Sheetal Armani' ]
+```
+### To Find Distinct Data from Nested Object was 
+```json
+test > db.collectionOfMessages.distinct("messages.comments"); // For Nested Object distinct Data we do this...
+```
+
+## Mathematical Operation on Our Database 
+#### We can do mathematical operations query on our Database according to our needs  
+#### let assume that we have collection which name was employeeRecords in which we have to find some data on the basis of Salary  
+
+### Greater than 
+```json 
+// let see syntax first of greater than 
+test > db.collection-name.find({ field : {$gt : 20000}});  // We create operator of greater than with the help of dollar sign "$"
+
+// Example of our query 
+employeeDatabase> db.employeeRecords.find({ salary : {$gt :20000}});
+```
+### Greater than equal 
+```json
+test> db.collection-name.find({filed : {$gte: 15000}}); // We create operator of greater than equal with the help of dollar sign "$"
+
+// Example of our query 
+employeeDatabase> db.employeeRecords.find({salary : {$gte : 15000}});
+```
+### Less than 
+```json
+// let see syntax first of less than 
+test > db.collection-name.find({ field  : {$lt : 20000}}); // We create operator of less than with the help of dollar sign "$" 
+
+// Example of our query 
+employeeDatabase> db.employeeRecords.find({salary : {$lt : 20000}});
+```
+### less than equal 
+```json 
+// let see synatx first of less than eqaul 
+test > db.collection-name.find({field :{$lte : 15000}}); // We create operator of less than equal with the help of dollar sign "$"
+
+// Example of our query 
+employeeDatabase> db.employeeRecords.find({salary : {$lte : 15000}});
+```
+### Not Equal to 
+```json 
+// let see syntax first of Not Equal to 
+test > db.collection-name.find({field {$ne : 3000 / "In Some Operator String was also accepted"}});
+
+// Example of our query 
+employeeDatabase > db.employeeRecords.find({salary : {$ne: 20000}}); // So this query give salary of employeee which was not equal to 20 Thousands 
+employeeDatabase > db.employeeRecords.find({userName : {$ne : "Armaan"}}); // So this query give userName which was not Armaan khan this not-equal query work on Strings.
+```
+
+### In Query 
+**In Query will work as OR operator of programming language we can pass array of values from our field and it match with that it give data from our database.**  
+```json 
+// let see syntax first of In Query 
+test > db.collection-name.find({field : {$in :[values of array]}});
+
+// let assume we find the data of employee who's birth year lies in given value 
+employeeDatabase> db.employeeRecords.find({dateOfBirth : {$in : [1995 , 1997 , 2001]}});
+```
+
+### All Query 
+**All Query will work Like AND operator of programming language we can pass array of values from our field and if the value was match with that given field than only it give data from database otherwise not.**
+```json 
+// let see synatx first of All Query 
+test > db.collection-name.find({ field : {$all :[values of array]}}) // If the values match it give data from our Data otherwise not...
+
+// let assume here also we find the data of employee who's birth year was 1995 and 1999
+employeeDatabase> db.employeeRecords.find({ dateOfBirth :{$all : [1995 , 1999]}});
+```
+### `We create mathematical operator through dollar sign "$"`
+
+## Update Queries 
+### Let see update queries how to update our data :- 
+
+### updateOne Query 
+With the help of this query we can update only one document of our collection.
+```json
+// let see syntax first 
+test > db.collection-name.updateOne.({field: "value"}, {$set : {givenField: "new-value" or newField:"new-value"}});
+// With the help of $set operator we can set new fileds or change the value of current filed
+
+// Example 
+employeeDatabase > db.employeeRecords.updateOne({employeeName:"Ayush Vyas"}, {$set : {employeeName:"Aayush Vyas"}}); 
+// It change only first Value 
+employeeDataBase > db.employeeRecords.updateOne({employeeName:"Aayush Vyas"}, {$set : {employeName:"Aayush Vyas"}});
+// Create the new filed
+``` 
+
+### We have to do increment to our value 
+For increment we use $inc operator  
+```json
+// let see synatx first
+test > db.collection-name.updateOne.({field:"value"}, {$inc : {number : 1}});
+
+// Example 
+employeeDatabase > db.employeeRecords.updateOne({salary:2000}, {$inc: {salary : 5000}});
+``` 
+
+### Now in our document we have array and we have to push data in it than ......
+For pushing data in array we use $push operator 
+```json 
+// let see syntax first 
+test > db.collection-name.updateOne.({_idOfDocument:"id"}, {$push :{number : 6}}) // Here the syntax and example of push data in array of our database.
+```
+
+### If we want to update multiple Documents than we use this command 
+```json
+test > db.collection-name.update({field:"Value"}, {$set : {filed:"new-value"} or {new-filed:"new-value"}}, {upsert : true}); // We can update multiple Documents with this command
+```
+
+## Deletion Queries 
+Now we see Deletion queries in our MonogoDB  
+
+### When we have to delete only one document  or key-pair value from our document
+To delete only one document or  key-pair value from our document
+```json
+test> db.collection-name.deleteOne( {
+    // Here we have write which data we have to delete or search 
+    "_id":"onject-id",
+    // or key-pair value 
+    "userName": "xyz"
+})
+```  
+
+### If we want to delete multiple documents or key pair value than we use this coomand
+```json
+test> db.collection-name.deleteMany({filed-for-search-filter: {$in/all : [values in array]}});
+```
